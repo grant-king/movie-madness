@@ -101,8 +101,13 @@ class Collection(models.Model):
     title = models.CharField(max_length=60)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, default='grant')
 
+    def __str__(self):
+        return self.title
+
 class Category(models.Model):
     title = models.CharField(max_length=60)
     movie = models.ManyToManyField(Movie)
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
