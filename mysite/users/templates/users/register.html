@@ -1,0 +1,132 @@
+{% extends "movies/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+    {% block custom_styles %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'movies/css/grayscale.min.css' %}" rel="stylesheet">
+    <style>
+        .masthead {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 35rem;
+          padding: 15rem 0;
+          background: -webkit-gradient(linear, left top, left bottom, from(rgba(22, 22, 22, 0.1)), color-stop(75%, rgba(22, 22, 22, 0.5)), to(#161616)), url("{% static 'movies/img/treading_water.jpg' %}");
+          background: linear-gradient(to bottom, rgba(22, 22, 22, 0.1) 0%, rgba(22, 22, 22, 0.5) 75%, #161616 100%), url("{% static 'movies/img/treading_water.jpg' %}");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+    </style>
+    {% endblock custom_styles %}
+
+
+
+{% block header %}
+<div class="container bg-dark">
+    <div class="row mt-5 text-light">
+        <div class="col mt-5">
+            <h2>Create an account to save your movie collection!</h2>
+        </div>
+    </div>
+</div>
+{% endblock header %}
+
+{% block about %}
+
+{% endblock about %}
+
+{% block projects %}
+<div class="container mt-5">
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom bm-4">Join Today</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Sign Up</button>
+        </div>
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">Already have an account?
+        <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+        </small>
+    </div>
+</div>
+</div>
+{% endblock projects %}
+
+{% block similar %}
+<!-- Signup Section -->
+<section class="contact-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+                <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                <h2 class="text-white mb-5">Similar Titles</h2>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Similar Section -->
+<section class="contact-section bg-black">
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Title 1</h4>
+                        <hr class="my-4">
+                        <div class="small text-black-50">
+                            <a href="#">
+                                A few words
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Title 2</h4>
+                        <hr class="my-4">
+                        <div class="small text-black-50">
+                            <a href="#">
+                                More words
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Title 3</h4>
+                        <hr class="my-4">
+                        <div class="small text-black-50">
+                            <a href="#">
+                                And yet more words
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+{% endblock similar %}

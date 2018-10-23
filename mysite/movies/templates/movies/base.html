@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    {% block title_area %}
+    <title>Title</title>
+    {% endblock title_area %}
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'movies/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'movies/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="{% static 'movies/css/grayscale.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+    <style>
+        .masthead {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 35rem;
+          padding: 15rem 0;
+          background: -webkit-gradient(linear, left top, left bottom, from(rgba(22, 22, 22, 0.1)), color-stop(75%, rgba(22, 22, 22, 0.5)), to(#161616)), url("{% static 'movies/img/treading_water.jpg' %}");
+          background: linear-gradient(to bottom, rgba(22, 22, 22, 0.1) 0%, rgba(22, 22, 22, 0.5) 75%, #161616 100%), url("{% static 'movies/img/treading_water.jpg' %}");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+
+    </style>
+    {% block custom_styles %}
+    {% endblock custom_styles %}
+</head>
+
+<body id="page-top">
+{% block navigation %}
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-secondary" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger text-dark" href="#page-top">Movie Madness</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'movies-home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'profile' %}">My Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'logout' %}">Log Out</a>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'movies-home' %}">Home Page</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'login' %}">Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="{% url 'register' %}">Sign Up</a>
+                </li>
+            </ul>
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col mb-5 mt-5">
+
+        </div>
+    </div>
+</div>
+{% endblock navigation %}
+
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="row alert alert-{{ message.tags }}">
+            <div class="col">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+{% block header %}
+
+{% endblock header %}
+
+{% block about %}
+
+{% endblock about %}
+
+{% block projects %}
+
+{% endblock projects %}
+
+{% block similar %}
+
+{% endblock similar %}
+
+<section>
+    <footer class="bg-black small text-center text-white-50">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Footer -->
+
+                <div class="social d-flex">
+                    <a href="#" class="mx-2">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="mx-2">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="mx-2">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="justify-content-sm-center">
+                    <div class="bg-black py-2 h-20">
+                        <div class="card-body text-center">
+                            <div class="small text-black-50">
+                                <a class="d-flex text-center justify-content-center"
+                                   href="https://www.themoviedb.org">
+                                    <img src="https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png"
+                                         width="82" height="86" title="White flower" alt="Flower">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</section>
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'movies/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'movies/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Plugin JavaScript -->
+<script src="{% static 'movies/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+<!-- Custom scripts for this template -->
+<script src="{% static 'movies/js/grayscale.min.js' %}"></script>
+
+</body>
+
+</html>

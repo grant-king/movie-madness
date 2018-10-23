@@ -1,0 +1,138 @@
+{% extends "movies/collection_base.html" %}
+{% load static %}
+
+
+{% block title_area %}
+{% if movie.title %}
+<title>{{ movie.title }}</title>
+{% else %}
+<title>Title</title>
+{% endif %}
+{% endblock title_area %}
+
+
+{% block custom_styles %}
+<!-- Custom styles for this template -->
+
+<link href="{% static 'movies/css/gallery_BS4.css' %}" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% endblock custom_styles %}
+
+{% block header %}
+<!-- Header -->
+<header class="masthead">
+    <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+            <a href="{% url 'collection-list' %}" class="btn btn-primary js-scroll-trigger">Back to Collection</a>
+        </div>
+    </div>
+</header>
+{% endblock header %}
+
+{% block about %}
+<!-- About Section -->
+<section id="about" class="about-section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                {% if object.title %}
+                <h2 class="text-white mb-4">{{ object.title }}</h2>
+                {% else %}
+                <h2 class="text-white mb-4">Title</h2>
+                {% endif %}
+                {% if object.owner %}
+                <p class="text-white-50">{{ object.owner }}</p>
+                {% else %}
+                <p class="text-white-50">Owner</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div>
+            {% if object %}
+            {% for item in object.movie.values %}
+            <p>
+                Title: {{ item.title }}
+            </p>
+            {% endfor %}
+            {% else %}
+            <p>nothing here</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock about %}
+
+{% block projects %}
+<div class="container">
+    <h1>Portfolio Gallery Filter</h1><br>
+    <div class="row">
+        <ul class="nav align-self-left" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
+                   aria-controls="showall" aria-selected="true">Show All</a>
+            </li>
+        </ul>
+    </div>
+    <hr noshade>
+    <div class="row">
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
+                {% if object %}
+                {% for item in object.movie.values %}
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">{{ item.title }}</div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>nothing here</p>
+                {% endif %}
+            </div>
+            <div class="tab-pane fade" id="Category_1" role="tabpanel" aria-labelledby="Category_1-tab">
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 10</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 20</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 30</div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Category_2" role="tabpanel" aria-labelledby="Category_2-tab">
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 11</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 21</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 31</div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Category_3" role="tabpanel" aria-labelledby="Category_3-tab">
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 11</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 12</div>
+                </div>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">Item 13</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock projects %}
+
+
+{% block similar %}
+
+{% endblock similar %}
