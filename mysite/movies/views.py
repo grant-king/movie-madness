@@ -21,9 +21,8 @@ def tmdb_id_form():
 def home(request):
     return render(request, 'movies/home.html')
 
-
 class CollectionListView(ListView):
-    model = Movie
+    model = Category
     template_name = 'movies/collection.html'
     context_object_name = 'collection'
     ordering = ['title']

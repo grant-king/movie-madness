@@ -56,13 +56,18 @@
     <div class="row">
         <div>
             {% if collection %}
-            {% for item in collection %}
-            <p>
-                Title: {{ item.title }}
-            </p>
-            {% endfor %}
+                {% for item in collection %}
+                <h3>
+                    Category: {{ item.title }}
+                </h3>
+                    {% for movie in item.movie.values %}
+                    <p>
+                        {{ movie.title }}
+                    </p>
+                    {% endfor %}
+                {% endfor %}
             {% else %}
-            <p>nothing here</p>
+                <p>nothing here</p>
             {% endif %}
         </div>
     </div>
