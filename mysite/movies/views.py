@@ -24,12 +24,13 @@ def home(request):
 class CollectionListView(ListView):
     model = Category
     template_name = 'movies/collection.html'
-    context_object_name = 'collection'
+    context_object_name = 'object'
     ordering = ['title']
 
 
 class CategoryDetailView(DetailView):
     model = Category
+
 
 def example(request):
     return render(request, 'movies/example.html')

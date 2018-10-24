@@ -37,13 +37,13 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                {% if collection.title %}
-                <h2 class="text-white mb-4">{{ collection.title }}</h2>
+                {% if object %}
+                <h2 class="text-white mb-4">{{ object.first.collection.title }}</h2>
                 {% else %}
-                <h2 class="text-white mb-4">Title</h2>
+                <h2 class="text-white mb-4">Movie Collection</h2>
                 {% endif %}
-                {% if collection.owner %}
-                <p class="text-white-50">{{ collection.owner }}</p>
+                {% if object.first.collection %}
+                <p class="text-white-50">{{ object.first.collection.owner }}</p>
                 {% else %}
                 <p class="text-white-50">Owner</p>
                 {% endif %}
@@ -52,120 +52,64 @@
     </div>
 </section>
 
-<div class="container">
-    <div class="row">
-        <div>
-            {% if collection %}
-                {% for item in collection %}
-                <h3>
-                    Category: {{ item.title }}
-                </h3>
-                    {% for movie in item.movie.values %}
-                    <p>
-                        {{ movie.title }}
-                    </p>
-                    {% endfor %}
-                {% endfor %}
-            {% else %}
-                <p>nothing here</p>
-            {% endif %}
-        </div>
-    </div>
-</div>
 {% endblock about %}
-
 {% block projects %}
 <div class="container">
-    <h1>Portfolio Gallery Filter</h1><br>
+
     <div class="row">
         <ul class="nav align-self-left" id="pills-tab" role="tablist">
+            {% if object %}
             <li class="nav-item">
                 <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
                    aria-controls="showall" aria-selected="true">Show All</a>
             </li>
+            {% for category in object %}
             <li class="nav-item">
-                <a class="nav-link" id="Category_1-tab" data-toggle="pill" href="#Category_1" role="tab"
-                   aria-controls="Category_1"
-                   aria-selected="false">Category_1</a>
+                <a class="nav-link" id="{{ category.title }}-tab" data-toggle="pill" href="#{{ category.title }}"
+                   role="tab"
+                   aria-controls="{{ category.title }}"
+                   aria-selected="false">{{ category.title }}</a>
             </li>
+            {% endfor %}
+            {% else %}
             <li class="nav-item">
-                <a class="nav-link" id="Category_2-tab" data-toggle="pill" href="#Category_2" role="tab"
-                   aria-controls="Category_2"
-                   aria-selected="false">Category_2</a>
+                <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
+                   aria-controls="showall" aria-selected="true">Show All</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="Category_3-tab" data-toggle="pill" href="#Category_3" role="tab"
-                   aria-controls="Category_3"
-                   aria-selected="false">Category_3</a>
-            </li>
+            {% endif %}
         </ul>
     </div>
     <hr noshade>
     <div class="row">
         <div class="tab-content" id="pills-tabContent">
+            <!--Start show all movie area-->
             <div class="tab-pane fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 1</div>
+                {% if object %}
+                {% for category in object %}
+                {% for movie in category.movie.values %}
+                <div class="Portfolio">
+                    <a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">{{ movie.title }}</div>
                 </div>
+                {% endfor %}
+                {% endfor %}
+                {% else %}
                 <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 2</div>
+                    <div class="desc">Category</div>
                 </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 3</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 4</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 5</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 6</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 7</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 8</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 9</div>
-                </div>
+                {% endif %}
+            </div>
 
+            {% for category in object %}
+            <div class="tab-pane fade" id="{{ category.title }}" role="tabpanel"
+                 aria-labelledby="{{ category.title }}-tab">
+                {% for movie in category.movie.values %}
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                    <div class="desc">{{ movie.title }}</div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="tab-pane fade" id="Category_1" role="tabpanel" aria-labelledby="Category_1-tab">
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 10</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 20</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 30</div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="Category_2" role="tabpanel" aria-labelledby="Category_2-tab">
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 11</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 21</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 31</div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="Category_3" role="tabpanel" aria-labelledby="Category_3-tab">
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 11</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 12</div>
-                </div>
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">Item 13</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
