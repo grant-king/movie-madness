@@ -21,53 +21,28 @@
 {% endblock custom_styles %}
 
 {% block header %}
-<!-- Header -->
-<header class="masthead">
-    <div class="container d-flex h-100 align-items-center">
-        <div class="mx-auto text-center">
-            <a href="#about" class="btn btn-primary js-scroll-trigger">Update Collection</a>
-        </div>
-    </div>
-</header>
+
 {% endblock header %}
 
-{% block about %}
-<!-- About Section -->
-<section id="about" class="about-section text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                {% if object %}
-                <h2 class="text-white mb-4">{{ object.first.collection.title }}</h2>
-                {% else %}
-                <h2 class="text-white mb-4">Movie Collection</h2>
-                {% endif %}
-                {% if object.first.collection %}
-                <p class="text-white-50">{{ object.first.collection.owner }}</p>
-                {% else %}
-                <p class="text-white-50">Owner</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</section>
 
-{% endblock about %}
 {% block projects %}
 <div class="container">
 
+    <!-- Start categorical tabs section -->
     <div class="row">
         <ul class="nav align-self-left" id="pills-tab" role="tablist">
-            {% if object %}
+            {% if objects %}
             <li class="nav-item">
-                <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
-                   aria-controls="showall" aria-selected="true">Show All</a>
-            </li>
-            {% for category in object %}
-            <li class="nav-item">
-                <a class="nav-link" id="{{ category.title }}-tab" data-toggle="pill" href="#{{ category.title }}"
+                <a class="btn btn-outline-secondary" id="showall-tab" data-toggle="pill" href="#showall"
                    role="tab"
-                   aria-controls="{{ category.title }}"
+                   aria-controls="showall">Show All</a>
+            </li>
+            {% for category in objects %}
+            <li class="nav-item">
+                <a class="btn btn-outline-secondary" id="{{ category.title|slugify }}-tab"
+                   data-toggle="pill" href="#{{ category.title|slugify }}"
+                   role="tab"
+                   aria-controls="{{ category.title|slugify }}"
                    aria-selected="false">{{ category.title }}</a>
             </li>
             {% endfor %}
@@ -79,35 +54,62 @@
             {% endif %}
         </ul>
     </div>
+    <!------------------------------------>
+
     <hr noshade>
     <div class="row">
         <div class="tab-content" id="pills-tabContent">
-            <!--Start show all movie area-->
+            <!-- Start show all movie section -->
             <div class="tab-pane fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
-                {% if object %}
-                {% for category in object %}
+                {% if objects %}
+                {% for category in objects %}
                 {% for movie in category.movie.values %}
                 <div class="Portfolio">
-                    <a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">{{ movie.title }}</div>
+                    {% if movie.poster_path %}
+                    <a href="#"><img class="card-img" src="http://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                     class="img-fluid" alt=""></a>
+                    {% else %}
+                    <a href="#"><img class="card-img" src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                     class="img-fluid" alt=""><div class="desc">{{ movie.title }}</div></a>
+                    <img  class="img-fluid" alt="">
+                    {% endif %}
+
+
                 </div>
                 {% endfor %}
                 {% endfor %}
                 {% else %}
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/300x450" alt=""></a>
                     <div class="desc">Category</div>
                 </div>
                 {% endif %}
             </div>
+            <!-- ---------------------------- -->
 
-            {% for category in object %}
-            <div class="tab-pane fade" id="{{ category.title }}" role="tabpanel"
-                 aria-labelledby="{{ category.title }}-tab">
+            <!-- Start categorical movie section -->
+            {% for category in objects %}
+            <div class="tab-pane fade" id="{{ category.title|slugify }}" role="tabpanel"
+                 aria-labelledby="{{ category.title|slugify }}-tab">
+                <div class="Portfolio card" style="{width:400px; height:400px}">
+                    <div class="card-body">
+                        <a class="card-link" href="{% url 'category-detail' category.id %}">Edit {{category.title}}
+                            Category</a>
+                    </div>
+                </div>
                 {% for movie in category.movie.values %}
-                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/400x400" alt=""></a>
-                    <div class="desc">{{ movie.title }}</div>
+                <div class="Portfolio">
+                    {% if movie.poster_path %}
+                    <a href="#"><img class="card-img" src="http://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                                     class="img-fluid" alt=""></a>
+                    {% else %}
+                    <a href="#"><img class="card-img" src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                     class="img-fluid" alt=""><p class="btn"><div class="desc">{{ movie.title }}</div></p></a>
+                    {% endif %}
+
                 </div>
                 {% endfor %}
+
+
             </div>
             {% endfor %}
         </div>
