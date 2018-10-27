@@ -3,6 +3,10 @@
 {% load static %}
 {% block custom_styles %}
 <!-- Custom styles for this template -->
+<link href="{% static 'movies/css/gallery_BS4.css' %}" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link href="{% static 'movies/css/grayscale.min.css' %}" rel="stylesheet">
 <style>
         .masthead {
@@ -20,17 +24,21 @@
         }
 
 
+
+
 </style>
 {% endblock custom_styles %}
 
 
 {% block header %}
-<div class="container bg-dark">
-    <div class="row mt-5 text-light">
-        <div class="col mt-5">
-            <h2>{{ user.username }}</h2>
+<div class="container">
+    <a href="#profile-info">
+        <div class="row mt-3 mb-3">
+            <div class="Portfolio card col">
+                <h2 class="mt-2 mb-2">My Account</h2>
+            </div>
         </div>
-    </div>
+    </a>
 </div>
 {% endblock header %}
 
@@ -40,11 +48,13 @@
 
 {% block projects %}
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="media">
-                <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-            </div>
+    <div class="row mt-3  mb-3">
+        <div class="col-sm-8 col-md-6 col-lg-4 text-white">
+            <img class="Portfolio card-img rounded-circle account-img" src="{{ user.profile.image.url }}"
+                 alt="Card image">
+        </div>
+
+        <div class="col-sm-4 col md-6 col-lg-4">
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
                 <p>{{ user.email }}</p>
@@ -53,7 +63,7 @@
 
     </div>
 </div>
-<div class="container mt-5">
+<div class="container mt-5" id="profile-info">
     <div class="content-section">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
