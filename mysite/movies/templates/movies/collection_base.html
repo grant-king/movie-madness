@@ -3,11 +3,9 @@
 
 
 {% block title_area %}
-{% if movie.title %}
-<title>{{ movie.title }}</title>
-{% else %}
-<title>Title</title>
-{% endif %}
+
+<title>Collection</title>
+
 {% endblock title_area %}
 
 
@@ -26,7 +24,7 @@
 
 
 {% block projects %}
-<div class="container">
+<div class="container-fluid">
 
     <!-- Start categorical tabs section -->
     <div class="row">
@@ -58,23 +56,24 @@
 
     <hr noshade>
     <div class="row">
-        <div class="tab-content" id="pills-tabContent">
+        <div id="pills-tabContent">
             <!-- Start show all movie section -->
-            <div class="tab-pane fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
+            <div class="tab-pane nav fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
                 {% if objects %}
                 {% for category in objects %}
-                {% for movie in category.movie.values %}
-                <div class="Portfolio">
-                    {% if movie.poster_path %}
-                    <a href="#"><img class="card-img" src="http://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                                     class="img-fluid" alt=""></a>
+                {% for movie in category.movie.get_queryset %}
+                <div class="nav-item col-2">
+                    {% if movie.info.poster_path %}
+                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
+                                     src="{{ movie.info.poster_path }}"
+                                     alt=""></a>
                     {% else %}
-                    <a href="#"><img class="card-img" src="http://via.placeholder.com/500x750?text=poster+unavailable"
-                                     class="img-fluid" alt=""><div class="desc">{{ movie.title }}</div></a>
-                    <img  class="img-fluid" alt="">
+                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
+                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                     alt="">
+                        <div class="desc">{{ movie.info.title }}</div>
+                    </a>
                     {% endif %}
-
-
                 </div>
                 {% endfor %}
                 {% endfor %}
@@ -87,31 +86,36 @@
             <!-- ---------------------------- -->
 
             <!-- Start categorical movie section -->
+            {% if objects %}
             {% for category in objects %}
-            <div class="tab-pane fade" id="{{ category.title|slugify }}" role="tabpanel"
+            <div class="tab-pane nav fade show" id="{{ category.title|slugify }}" role="tabpanel"
                  aria-labelledby="{{ category.title|slugify }}-tab">
-                <div class="Portfolio card" style="{width:400px; height:400px}">
+             <div class="nav-item col-2">
                     <div class="card-body">
                         <a class="card-link" href="{% url 'category-detail' category.id %}">Edit {{category.title}}
                             Category</a>
                     </div>
                 </div>
-                {% for movie in category.movie.values %}
-                <div class="Portfolio">
-                    {% if movie.poster_path %}
-                    <a href="#"><img class="card-img" src="http://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                                     class="img-fluid" alt=""></a>
-                    {% else %}
-                    <a href="#"><img class="card-img" src="http://via.placeholder.com/500x750?text=poster+unavailable"
-                                     class="img-fluid" alt=""><p class="btn"><div class="desc">{{ movie.title }}</div></p></a>
-                    {% endif %}
 
+                {% for movie in category.movie.get_queryset %}
+                <div class="nav-item col-2">
+                    {% if movie.info.poster_path %}
+                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
+                                     src="{{ movie.info.poster_path }}"
+                                     alt=""></a>
+                    {% else %}
+                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
+                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                     alt="">
+                        <div class="desc">{{ movie.title }}</div>
+                    </a>
+                    {% endif %}
                 </div>
                 {% endfor %}
 
-
             </div>
             {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
