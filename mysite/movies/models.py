@@ -2,22 +2,32 @@ from django.db import models
 from django.contrib.auth.models import User
 import tmdbsimple as tmdb
 import json
+from django.utils.functional import cached_property
+from django.urls import reverse
 
 class Movie(models.Model):
     tmdb_id = models.IntegerField()
-    title = models.CharField(max_length=100, default='')
-    top_crew = models.CharField(max_length=400, default=['' for i in range(5)])
-    top_cast = models.CharField(max_length=400, default=['' for i in range(5)])
-    back_image = models.CharField(max_length=100, default='https://via.placeholder.com/150x350')
-    poster_path = models.CharField(max_length=100, default='https://via.placeholder.com/150x350')
-    featured_image = models.CharField(max_length=100, default='https://via.placeholder.com/350x150')
-    content_image_1 = models.CharField(max_length=100, default='https://via.placeholder.com/350x150')
-    content_image_2 = models.CharField(max_length=100, default='https://via.placeholder.com/350x150')
-    tagline = models.CharField(max_length=100, default='')
-    overview = models.TextField(default='')
+
+    @cached_property
+    def info(self):
+        info = self._get_info(self.tmdb_id)
+        return {'title': info['title'],
+        'top_crew': info['top_crew'],
+        'top_cast': info['top_cast'],
+        'back_image': info['back_image'],
+        'poster_path': 'http://image.tmdb.org/t/p/w500' + str(info['poster_path']),
+        'featured_image': info['featured_image'],
+        'content_image_1': info['content_image_1'],
+        'content_image_2': info['content_image_2'],
+        'tagline': info['tagline'],
+        'overview': info['overview']}
+
 
     def __str__(self):
-        return self.title
+        return self.info['title']
+
+    def get_absolute_url(self):
+        return reverse('movie-detail', kwargs={'pk': self.pk})
 
     def _tmdb_auth(self):
         # Load credentials from json file
@@ -45,8 +55,12 @@ class Movie(models.Model):
 
         for dictionary in image_url_suffix_list:
             url_list.append(img_base_url + dictionary['file_path'])
+        try:
+            chosen_url = choice(url_list)
+        except IndexError:
+            chosen_url = 'http://via.placeholder.com/500x750?text=poster+unavailable'
+        return chosen_url
 
-        return choice(url_list)
 
     def _top_cast_list(self, movie):
         jobs = [movie.credits()['cast'][i]['character'] for i in range(5)]
@@ -57,7 +71,7 @@ class Movie(models.Model):
         jobs = [movie.credits()['crew'][i]['job'] for i in range(5)]
         people = [movie.credits()['crew'][i]['name'] for i in range(5)]
         return dict(zip(jobs, people))
-
+"""
     @classmethod
     def create(cls, tmdb_id):
         id = int(tmdb_id)
@@ -86,7 +100,7 @@ class Movie(models.Model):
                    content_image_2=info['content_image_2'],
                    tagline=info['tagline'],
                    overview=info['overview'])
-
+"""
 class Crew(models.Model):
     first = models.CharField(max_length=20)
     last = models.CharField(max_length=20)
