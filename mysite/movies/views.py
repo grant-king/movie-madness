@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import tmdbsimple as tmdb
 from .models import Movie, Collection, Category
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 
 def collection_movie_objects():
@@ -24,13 +24,23 @@ def home(request):
 class CollectionListView(ListView):
     model = Category
     template_name = 'movies/collection.html'
-    context_object_name = 'object'
+    context_object_name = 'objects'
     ordering = ['title']
 
 
 class CategoryDetailView(DetailView):
     model = Category
 
+class CategoryCreateView(CreateView):
+    model = Category
+    fields = ['title']
+
+class MovieDetailView(DetailView):
+    model = Movie
+
+class MovieCreateView(CreateView):
+    model = Movie
+    fields = ['tmdb_id']
 
 def example(request):
     return render(request, 'movies/example.html')
@@ -43,7 +53,6 @@ def collection(request):
 
 def item(request):
     from random import choice
-
     form = tmdb_id_form()
     context = {'movie': choice(Movie.objects.all()), 'form':form}
     return render(request, 'movies/item_base.html', context)
