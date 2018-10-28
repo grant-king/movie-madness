@@ -6,12 +6,12 @@ from django.utils.functional import cached_property
 from django.urls import reverse
 
 class Movie(models.Model):
-    tmdb_id = models.IntegerField()
 
     @cached_property
     def info(self):
-        info = self._get_info(self.tmdb_id)
-        return {'title': info['title'],
+        info = self._get_info()
+        return {
+        'title': info['title'],
         'top_crew': info['top_crew'],
         'top_cast': info['top_cast'],
         'back_image': info['back_image'],
@@ -22,8 +22,26 @@ class Movie(models.Model):
         'tagline': info['tagline'],
         'overview': info['overview']}
 
+    def _get_info(self):
+        self._tmdb_auth()
+        movie = tmdb.Movies(self.pk)
+        response = movie.info()
+        response['top_crew'] = self._top_crew_list(movie)
+        response['top_cast'] = self._top_cast_list(movie)
+        response['back_image'] = self._single_url(movie.images()['posters'])
+        response['featured_image'] = self._single_url(movie.images()['backdrops'])
+        response['content_image_1'] = self._single_url(movie.images()['backdrops'])
+        response['content_image_2'] = self._single_url(movie.images()['backdrops'])
+        return response
+
+    tmdb_id = models.IntegerField(primary_key=True)
+    title = models.TextField(default='')
+    poster_path = models.CharField(max_length=100, default='')
 
     def __str__(self):
+        return self.title
+
+    def get_title(self):
         return self.info['title']
 
     def get_absolute_url(self):
@@ -34,19 +52,6 @@ class Movie(models.Model):
         with open('movies/tmdb_credentials.json', "r") as file:
             creds = json.load(file)
         tmdb.API_KEY = creds['API_KEY']
-
-    def _get_info(self, tmdb_id):
-        self._tmdb_auth()
-        movie = tmdb.Movies(tmdb_id)
-        response = movie.info()
-
-        response['top_crew'] = self._top_crew_list(movie)
-        response['top_cast'] = self._top_cast_list(movie)
-        response['back_image'] = self._single_url(movie.images()['posters'])
-        response['featured_image'] = self._single_url(movie.images()['backdrops'])
-        response['content_image_1'] = self._single_url(movie.images()['backdrops'])
-        response['content_image_2'] = self._single_url(movie.images()['backdrops'])
-        return response
 
     def _single_url(self, image_url_suffix_list):
         from random import choice
@@ -61,7 +66,6 @@ class Movie(models.Model):
             chosen_url = 'http://via.placeholder.com/500x750?text=poster+unavailable'
         return chosen_url
 
-
     def _top_cast_list(self, movie):
         jobs = [movie.credits()['cast'][i]['character'] for i in range(5)]
         people = [movie.credits()['cast'][i]['name'] for i in range(5)]
@@ -71,7 +75,7 @@ class Movie(models.Model):
         jobs = [movie.credits()['crew'][i]['job'] for i in range(5)]
         people = [movie.credits()['crew'][i]['name'] for i in range(5)]
         return dict(zip(jobs, people))
-"""
+
     @classmethod
     def create(cls, tmdb_id):
         id = int(tmdb_id)
@@ -91,16 +95,17 @@ class Movie(models.Model):
         info = response
         return cls(tmdb_id=id,
                    title=info['title'],
-                   top_crew=info['top_crew'],
-                   top_cast=info['top_cast'],
-                   back_image=info['back_image'],
-                   poster_path=info['poster_path'],
-                   featured_image=info['featured_image'],
-                   content_image_1=info['content_image_1'],
-                   content_image_2=info['content_image_2'],
-                   tagline=info['tagline'],
-                   overview=info['overview'])
-"""
+                   #top_crew=info['top_crew'],
+                   #top_cast=info['top_cast'],
+                   #back_image=info['back_image'],
+                   poster_path= 'http://image.tmdb.org/t/p/w500' + str(info['poster_path']),
+                   #featured_image=info['featured_image'],
+                   #content_image_1=info['content_image_1'],
+                   #content_image_2=info['content_image_2'],
+                   #tagline=info['tagline'],
+                   #overview=info['overview',]
+                 )
+
 class Crew(models.Model):
     first = models.CharField(max_length=20)
     last = models.CharField(max_length=20)
