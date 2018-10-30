@@ -1,0 +1,61 @@
+{% extends "movies/base.html" %}
+
+{% load static %}
+    {% block custom_styles %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'movies/css/grayscale.min.css' %}" rel="stylesheet">
+    <style>
+        .masthead {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 35rem;
+          padding: 15rem 0;
+          background: -webkit-gradient(linear, left top, left bottom, from(rgba(22, 22, 22, 0.1)), color-stop(75%, rgba(22, 22, 22, 0.5)), to(#161616)), url("{% static 'movies/img/treading_water.jpg' %}");
+          background: linear-gradient(to bottom, rgba(22, 22, 22, 0.1) 0%, rgba(22, 22, 22, 0.5) 75%, #161616 100%), url("{% static 'movies/img/treading_water.jpg' %}");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+    </style>
+    {% endblock custom_styles %}
+
+
+
+{% block header %}
+<div class="container bg-dark">
+    <div class="row mt-5 text-light">
+        <div class="col mt-5">
+            <h2>Delete a Category</h2>
+        </div>
+    </div>
+</div>
+{% endblock header %}
+
+{% block about %}
+
+{% endblock about %}
+
+{% block projects %}
+<div class="container mt-5">
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom bm-4">Delete {{ object.title }} Category</legend>
+            <h2>Are you sure you want to delete the {{ object.title }} category?</h2>
+
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-danger" type="submit">Delete</button>
+            <button class="btn btn-sm btn-outline-warning" href="{% url 'category-detail' object.pk %}">Nevermind!</button>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock projects %}
+
+{% block similar %}
+<
+{% endblock similar %}
