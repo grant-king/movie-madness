@@ -27,26 +27,38 @@
 <div class="container-fluid">
 
     <!-- Start categorical tabs section -->
-    <div class="row">
-        <ul class="nav align-self-left" id="pills-tab" role="tablist">
+    <div class="row" id="control-area">
+        <ul class="nav" id="pills-tab" role="tablist">
             {% if objects %}
             <li class="nav-item">
-                <a class="btn btn-outline-secondary" id="showall-tab" data-toggle="pill" href="#showall"
+                <a class="btn btn-outline-secondary" id="showall-tab"
+                   href="#showall"
+                   type="tab"
                    role="tab"
-                   aria-controls="showall">Show All</a>
+                   data-toggle="collapse"
+                   aria-controls="#showall">Show All</a>
             </li>
             {% for category in objects %}
             <li class="nav-item">
                 <a class="btn btn-outline-secondary" id="{{ category.title|slugify }}-tab"
-                   data-toggle="pill" href="#{{ category.title|slugify }}"
+                   href="#{{ category.title|slugify }}"
+                   type="tab"
                    role="tab"
-                   aria-controls="{{ category.title|slugify }}"
-                   aria-selected="false">{{ category.title }}</a>
+                   data-toggle="collapse"
+                   aria-controls="#{{ category.title|slugify }}">{{ category.title }}</a>
             </li>
             {% endfor %}
+            <li class="nav-item">
+                <a class="btn btn-outline-primary" href="{% url 'category-new' %}">
+                    Add New Category
+                </a>
+            </li>
+
+
+
             {% else %}
             <li class="nav-item">
-                <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
+                <a class="nav-link active" id="showall-tab" data-toggle="collapse" href="#showall" role="tab"
                    aria-controls="showall" aria-selected="true">Show All</a>
             </li>
             {% endif %}
@@ -63,15 +75,15 @@
                 {% for category in objects %}
                 {% for movie in category.movie.get_queryset %}
                 <div class="nav-item col-2">
-                    {% if movie.info.poster_path %}
-                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
-                                     src="{{ movie.info.poster_path }}"
-                                     alt=""></a>
+                    {% if movie.poster_path %}
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="{{ movie.poster_path }}"
+                                                                     alt=""></a>
                     {% else %}
-                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
-                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
-                                     alt="">
-                        <div class="desc">{{ movie.info.title }}</div>
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                                                     alt="">
+                        <div class="desc">{{ movie.title }}</div>
                     </a>
                     {% endif %}
                 </div>
@@ -88,9 +100,9 @@
             <!-- Start categorical movie section -->
             {% if objects %}
             {% for category in objects %}
-            <div class="tab-pane nav fade show" id="{{ category.title|slugify }}" role="tabpanel"
+            <div class="tab-pane nav fade" id="{{ category.title|slugify }}" role="tabpanel"
                  aria-labelledby="{{ category.title|slugify }}-tab">
-             <div class="nav-item col-2">
+                <div class="nav-item col-2">
                     <div class="card-body">
                         <a class="card-link" href="{% url 'category-detail' category.id %}">Edit {{category.title}}
                             Category</a>
@@ -99,14 +111,15 @@
 
                 {% for movie in category.movie.get_queryset %}
                 <div class="nav-item col-2">
-                    {% if movie.info.poster_path %}
-                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
-                                     src="{{ movie.info.poster_path }}"
-                                     alt=""></a>
+                    {% if movie.poster_path %}
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="{{ movie.poster_path }}"
+                                                                     alt="">
+                    </a>
                     {% else %}
-                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
-                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
-                                     alt="">
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                                                     alt="">
                         <div class="desc">{{ movie.title }}</div>
                     </a>
                     {% endif %}
