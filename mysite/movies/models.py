@@ -11,6 +11,7 @@ class Movie(models.Model):
     def info(self):
         info = self._get_info()
         return {
+        'tmdb_id':self.tmdb_id,
         'title': info['title'],
         'top_crew': info['top_crew'],
         'top_cast': info['top_cast'],
@@ -41,11 +42,8 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
-    def get_title(self):
-        return self.info['title']
-
     def get_absolute_url(self):
-        return reverse('movie-detail', kwargs={'pk': self.pk})
+        return reverse('movie-detail', kwargs={'pk': self.tmdb_id})
 
     def _tmdb_auth(self):
         # Load credentials from json file
@@ -93,7 +91,7 @@ class Movie(models.Model):
         response['content_image_1'] = Movie._single_url(cls, movie.images()['backdrops'])
         response['content_image_2'] = Movie._single_url(cls, movie.images()['backdrops'])
         info = response
-        return cls(tmdb_id=id,
+        return cls(tmdb_id=info['id'],
                    title=info['title'],
                    #top_crew=info['top_crew'],
                    #top_cast=info['top_cast'],
@@ -130,3 +128,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('category-detail', kwargs={'pk': self.id})
