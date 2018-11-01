@@ -1,0 +1,69 @@
+{% extends 'movies/collection_base.html' %}>
+{% block projects %}
+
+<div class="container-fluid">
+
+    <!-- Start categorical tabs section -->
+    <div class="row">
+        <ul class="nav align-self-left" id="pills-tab" role="tablist">
+            {% if objects %}
+            <li class="nav-item">
+                <a class="btn btn-outline-secondary" id="showall-tab" data-toggle="pill" href="#showall"
+                   role="tab"
+                   aria-controls="showall">Show All</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-outline-primary" href="{% url 'movie-new' %}">
+                    Add New Movie
+                </a>
+            </li>
+
+
+
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link active" id="showall-tab" data-toggle="pill" href="#showall" role="tab"
+                   aria-controls="showall" aria-selected="true">Show All</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <!------------------------------------>
+
+    <hr noshade>
+    <div class="row">
+        <div id="pills-tabContent">
+            <!-- Start show all movie section -->
+            <div class="tab-pane nav fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
+                {% if objects %}
+                {% for movie in objects %}
+
+                <div class="nav-item col-2">
+                    {% if movie.poster_path %}
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="{{ movie.poster_path }}"
+                                                                     alt=""></a>
+                    {% else %}
+                    <a href="{% url 'movie-detail' movie.pk %}"><img class="img-fluid Portfolio card-img"
+                                                                     src="http://via.placeholder.com/500x750?text=poster+unavailable"
+                                                                     alt="">
+                        <div class="desc">{{ movie.title }}</div>
+                    </a>
+                    {% endif %}
+                </div>
+
+                {% endfor %}
+                {% else %}
+                <div class="Portfolio"><a href="#!"><img class="card-img" src="http://placehold.it/300x450" alt=""></a>
+                    <div class="desc">Category</div>
+                </div>
+                {% endif %}
+            </div>
+            <!-- ---------------------------- -->
+
+        </div>
+    </div>
+</div>
+
+{% endblock projects %}
