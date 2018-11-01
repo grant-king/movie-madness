@@ -1,36 +1,19 @@
 from django.shortcuts import render
-import tmdbsimple as tmdb
 from .models import Movie, Collection, Category
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import path, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-def collection_movie_objects():
-    refs = [4413, 1992, 590]
-    collection = {}
-
-    for index, item in enumerate(refs):
-        var_str = 'Movie_' + str(index)
-        collection[var_str] = Movie.create(item)
-
-    return collection
-
-def tmdb_id_form():
-    from django import forms
 
 def home(request):
     return render(request, 'movies/home.html')
-
-class CollectionListView(ListView):
-    model = Category
-    template_name = 'movies/collection.html'
-    context_object_name = 'objects'
-    ordering = ['title']
 
 def example(request):
     return render(request, 'movies/example.html')
 
 def collection(request):
     context = {'collection': Movie.objects.all()}
-    return render(request, 'movies/collection.html', context)
+    return render(request, 'movies/category_list.html', context)
 
 def item(request):
     from random import choice
@@ -38,14 +21,49 @@ def item(request):
     context = {'movie': choice(Movie.objects.all()), 'form':form}
     return render(request, 'movies/item_base.html', context)
 
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'movies/category_list.html'
+    context_object_name = 'objects'
+    ordering = ['title']
 
 class CategoryDetailView(DetailView):
     model = Category
 
-
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
-    fields = ['title']
+    fields = ['title', 'movie', 'collection']
+
+class CategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Category
+    fields = ['title', 'movie', 'collection']
+
+    def test_func(self):
+        """check to see if user attempting to update category is owner"""
+        category = self.get_object()
+        if self.request.user == category.collection.owner:
+            return True
+        return False
+
+class CategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Category
+    fields = ['title', 'movie', 'collection']
+
+    def test_func(self):
+        """check to see if user attempting to update category is owner"""
+        category = self.get_object()
+        if self.request.user == category.collection.owner:
+            return True
+        return False
+
+    def get_success_url(self):
+        return reverse('category-list')
+
+class MovieListView(ListView):
+    model = Movie
+    template_name = 'movies/movie_list.html'
+    context_object_name = 'objects'
+    ordering = ['title']
 
 
 class MovieDetailView(DetailView):
@@ -55,6 +73,9 @@ class MovieDetailView(DetailView):
 class MovieCreateView(CreateView):
     model = Movie
     fields = ['tmdb_id']
+
+    def get_success_url(self):
+        return reverse('movie-list')
 
     def form_valid(self, form):
         form.instance = Movie.create(form.instance.tmdb_id)
