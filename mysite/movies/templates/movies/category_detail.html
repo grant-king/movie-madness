@@ -20,6 +20,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 {% endblock custom_styles %}
 
+{% block navigation %}
+{% endblock navigation %}
+
 {% block header %}
 <!-- Header -->
 
@@ -33,11 +36,10 @@
         <ul class="nav align-self-left" id="pills-tab" role="tablist">
             {% if object %}
             <li class="nav-item">
-                <a class="btn btn-outline-secondary" id="{{ object.title|slugify }}-tab"
-                   data-toggle="pill" href="#{{ object.title|slugify }}"
+                <a class="btn btn-outline-secondary"
+                   href="{% url 'category-update' object.pk %}"
                    role="tab"
-                   aria-controls="{{ object.title|slugify }}"
-                   aria-selected="false">Add Movies to {{ object.title }} Category</a>
+                   >Add Movies to {{ object.title }} Category</a>
             </li>
 
             {% else %}
@@ -50,8 +52,10 @@
     </div>
     <div class="nav">
         <div class="nav-item text-center">
-            <a class="btn btn-primary" href="{% url 'collection-list' %}" class="btn btn-primary js-scroll-trigger">Back to Collection</a>
-        </div></div>
+            <a class="btn btn-primary js-scroll-trigger" href="{% url 'category-list' %}" >Back to Collection</a>
+            <a class="btn btn-sm btn-warning js-scroll-trigger" href="{% url 'category-delete' object.pk %}">Delete {{ object.title }} Category</a>
+        </div>
+    </div>
     <!------------------------------------>
 
     <hr noshade>
@@ -60,18 +64,17 @@
             <!-- Start show all movie section -->
             <div class="tab-pane nav fade show active" id="showall" role="tabpanel" aria-labelledby="showall-tab">
                 {% if object %}
-
                 {% for movie in object.movie.get_queryset %}
                 <div class="nav-item col-2">
-                    {% if movie.info.poster_path %}
-                    <a href="{% url 'movie-detail' movie.id %}"><img class="img-fluid Portfolio card-img"
-                                     src="{{ movie.info.poster_path }}"
+                    {% if movie.poster_path %}
+                    <a href="{% url 'movie-detail' movie.tmdb_id %}"><img class="img-fluid Portfolio card-img"
+                                     src="{{ movie.poster_path }}"
                                      alt=""></a>
                     {% else %}
                     <a href="#"><img class="img-fluid Portfolio card-img"
                                      src="http://via.placeholder.com/500x750?text=poster+unavailable"
                                      alt="">
-                        <div class="desc">{{ movie.info.title }}</div>
+                        <div class="desc">{{ movie.title }}</div>
                     </a>
                     {% endif %}
                 </div>
