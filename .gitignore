@@ -17,6 +17,3 @@ tests/.coverage
 build/
 tests/report/
 mysite/movies/tmdb_credentials.json
-mysite/movies/static/movies/scss/
-mysite/movies/static/movies/js/
-mysite/movies/static/movies/vendor/
