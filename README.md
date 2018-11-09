@@ -7,6 +7,8 @@ Categorical gallery preview:
 ### Getting Started
 
 ##### Setup prerequisites
+Get your tmdb api key
+
 Clone the code.
 
 Set up a new python 3 virtual environment and pip install:
@@ -16,6 +18,8 @@ Set up a new python 3 virtual environment and pip install:
 * django-crispy-forms
 
 * tmdbsimple
+
+* pillow
 
 ##### Start Server
 Navigate your terminal to the directory containing cloned code on your local machine.
@@ -29,3 +33,7 @@ Something like:
  ` python manage.py runserver `
 
  Open a browser to the specified url to explore the app.
+
+Before being able to load in movie details, you will have to insert your tmdb api key at the appropriate spot in the ` _tmdb_auth ` method of Movie object in models.py
+
+Sign up for an account (details don't matter; this is just for )
