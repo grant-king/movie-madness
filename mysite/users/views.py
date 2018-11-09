@@ -10,7 +10,8 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}! You are now able to log in.')
+            message_string = 'Account created for ' + str(username) + '! You are now able to log in'
+            messages.success(request, message_string)
             return redirect('login')
     else:
         form = UserRegisterForm()
@@ -27,7 +28,8 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been updated!')
+            message_string = 'Your account has been updated!'
+            messages.success(request, message_string)
             return redirect('profile') #prevent form resubmission warning
     else:
         u_form = UserUpdateForm(instance=request.user)

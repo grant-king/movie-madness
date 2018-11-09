@@ -8,7 +8,8 @@ class Profile(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        username = self.user.username
+        return str(username) + ' Profile'
 
     def __save__(self, **kwargs):
         super().save()
